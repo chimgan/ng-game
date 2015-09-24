@@ -19,21 +19,23 @@ angular.module('myApp.game', ['ngRoute'])
             'cursor': 'pointer'
         };
 
+        $scope.mydirtyfix = {};
+
         $scope.reset = function() {
-            $scope.board = [
+            $scope.mydirtyfix.board = [
                 ['', '', ''],
                 ['', '', ''],
                 ['', '', '']
             ];
-            $scope.nextMove = 'X';
-            $scope.winner = '';
+            $scope.mydirtyfix.nextMove = 'X';
+            $scope.mydirtyfix.winner = '';
             setUrl();
         };
 
         $scope.dropPiece = function(row, col) {
-            if (!$scope.winner && !$scope.board[row][col]) {
-                $scope.board[row][col] = $scope.nextMove;
-                $scope.nextMove = $scope.nextMove == 'X' ? 'O' : 'X';
+            if (!$scope.mydirtyfix.winner && !$scope.mydirtyfix.board[row][col]) {
+                $scope.mydirtyfix.board[row][col] = $scope.mydirtyfix.nextMove;
+                $scope.mydirtyfix.nextMove = $scope.mydirtyfix.nextMove == 'X' ? 'O' : 'X';
                 setUrl();
             }
         };
@@ -43,15 +45,15 @@ angular.module('myApp.game', ['ngRoute'])
 
         function setUrl() {
             var rows = [];
-            angular.forEach($scope.board, function(row) {
+            angular.forEach($scope.mydirtyfix.board, function(row) {
                 rows.push(row.join(','));
             });
-            $location.search({board: rows.join(';') + '/' + $scope.nextMove});
+            $location.search({board: rows.join(';') + '/' + $scope.mydirtyfix.nextMove});
         }
 
         function grade() {
-            var b = $scope.board;
-            $scope.winner =
+            var b = $scope.mydirtyfix.board;
+            $scope.mydirtyfix.winner =
                 row(0) || row(1) || row(2) ||
                 col(0) || col(1) || col(2) ||
                 diagonal(-1) || diagonal(1);
@@ -64,9 +66,9 @@ angular.module('myApp.game', ['ngRoute'])
         function readUrl(value) {
             if (value) {
                 value = value.split('/');
-                $scope.nextMove = value[1];
+                $scope.mydirtyfix.nextMove = value[1];
                 angular.forEach(value[0].split(';'), function(row, col){
-                    $scope.board[col] = row.split(',');
+                    $scope.mydirtyfix.board[col] = row.split(',');
                 });
                 grade();
             }
